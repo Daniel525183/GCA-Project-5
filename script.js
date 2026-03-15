@@ -3,15 +3,20 @@ const GOAL_CANS = 25;        // Total items needed to collect
 let currentCans = 0;         // Current number of items collected
 let gameActive = false;      // Tracks if game is currently running
 let spawnInterval;          // Holds the interval for spawning items
-const wellCost = 5;         // The score cost to free a well
+const maxTime = 10;         // Holds the time limit
+let time;                   // Holds the current amount of time
+let secondInterval;          // Holds interval between seconds
+let gameEndInterval;        // Holds the interval for ending game (time == 0)
 
+const wellCost = 5;         // The score cost to free a well
 let wellTracker = Array.from({ length: 4 }, () => new Array(4).fill(false));
+//Will tracks which wells are free/dug
+//False == blocked well
+//True == free well
 resetWells();
 console.log(wellTracker);
- //Will tracks which wells are free/dug
- //False == blocked well
- //True == free well
 
+let gameTimer = document.getElementById("timer");
 
 
 //Function that resets wells to starting configuration
@@ -23,14 +28,14 @@ function resetWells(){
   //First set all wells to blocked.
   for (let row = 0; row < 4; row++){
     for(let col = 0; col < 4; col ++){
-      wellTracker[row][col] = 0; 
+      wellTracker[row][col] = false; 
     }
   }
 
   //Afterwards, set the four internal wells to be free
   for (let row = 1; row < 3; row++){
     for(let col = 1; col < 3; col ++){
-      wellTracker[row][col] = 1; 
+      wellTracker[row][col] = true; 
     }
   }
 }
@@ -81,13 +86,32 @@ function spawnWaterCan() {
 // Initializes and starts a new game
 function startGame() {
   if (gameActive) return; // Prevent starting a new game if one is already active
+  time = maxTime;
   resetWells();
   gameActive = true;
   createGrid(); // Set up the game grid
   
+
+  gameEndInterval = setInterval(checkTime, 1000); //Checks every second to see if the timer has run out
+  //Ends game if so
   spawnInterval = setInterval(spawnWaterCan, 1000); // Spawn water cans every second
+  secondInterval = setInterval(updateTimer, 1000); //Updates timer every second
+  
+
+  console.log("Stopped running");
 }
 
+//Function that decrements the timer by one second and updates it
+function updateTimer(){
+  if (time == 0) return;
+  time -= 1;
+  gameTimer.textContent = time;
+}
+
+//Function used to end the game whentime runs out
+function checkTime(){
+  if (time <= 0) endGame();
+}
 //Function that will pause the timer and prevent any more interaction until unpaused
 function pauseGame(){
   console.log("TODO: pauseGame()")
@@ -95,7 +119,9 @@ function pauseGame(){
 
 function endGame() {
   gameActive = false; // Mark the game as inactive
+  clearInterval(gameEndInterval);// Stops checking if the game has ended (it has.)
   clearInterval(spawnInterval); // Stop spawning water cans
+  clearInterval(secondInterval); // Stops decrementing time
 }
 
 // Set up click handler for the start button
