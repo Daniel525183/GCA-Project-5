@@ -51,8 +51,8 @@ function clickWell(event){
   //Otherwise, it is a free well, thus run collectWater().
   if (clickedWell.classList.contains('blocked-well')){
     console.log("blocked well");
-  } else if (clickedWell.classList.contains('free-well-empty')){
-    collectWater("free well");
+  } else if (clickedWell.classList.contains('free-well-full')){
+    collectWater(event);
   }
 }
 
