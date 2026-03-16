@@ -1,6 +1,6 @@
 // Game configuration and state variables
-const GOAL_CANS = 25;        // Total items needed to collect
-let currentCans = 0;         // Current number of items collected
+//const GOAL_CANS = 25;        // Total items needed to collect
+let score = 0;            // Current score
 let gameActive = false;      // Tracks if game is currently running
 let spawnInterval;          // Holds the interval for spawning items
 const maxTime = 10;         // Holds the time limit
@@ -9,6 +9,7 @@ let secondInterval;          // Holds interval between seconds
 let gameEndInterval;        // Holds the interval for ending game (time == 0)
 
 const wellCost = 5;         // The score cost to free a well
+const waterVal = 5;         // The score gained from collecting water
 let wellTracker = Array.from({ length: 4 }, () => new Array(4).fill(false));
 //Will tracks which wells are free/dug
 //False == blocked well
@@ -17,6 +18,8 @@ resetWells();
 console.log(wellTracker);
 
 let gameTimer = document.getElementById("timer");
+let scoreCard = document.getElementById("score-card");
+let wellElement;
 
 
 //Function that resets wells to starting configuration
@@ -38,6 +41,23 @@ function resetWells(){
       wellTracker[row][col] = true; 
     }
   }
+}
+
+//Function that determines what happens when a well is clicked.
+function clickWell(){
+  //Check what type of well it is
+  //If its unblocked, then run collectWater()
+  //Otherwise, run digWell()
+  collectWater();
+}
+
+//Function that collects water from unblocked water. Has a check is see if that well has water
+function collectWater(){
+  console.log("TODO: collectWater()")
+  if (!gameActive) return;
+  
+  score += waterVal;
+  scoreCard.textContent = score;
 }
 
 //Function that frees a well if the player has enough score
@@ -65,7 +85,7 @@ function createGrid() {
 createGrid();
 
 // Spawns a new item in a random grid cell
-function spawnWaterCan() {
+function spawnWell() {
   if (!gameActive) return; // Stop if the game is not active
   const cells = document.querySelectorAll('.grid-cell');
   
@@ -77,16 +97,21 @@ function spawnWaterCan() {
 
   // Use a template literal to create the wrapper and water-can element
   randomCell.innerHTML = `
-    <div class="water-can-wrapper">
-      <div class="water-can"></div>
+    <div class="well-can-wrapper" id = "currentWell">
+      <div class="well-can"></div>
     </div>
   `;
+
+  //Update the element for the well
+  wellElement = document.getElementById("currentWell");
+  wellElement.addEventListener('click', clickWell);
 }
 
 // Initializes and starts a new game
 function startGame() {
   if (gameActive) return; // Prevent starting a new game if one is already active
   time = maxTime;
+  score = 0;
   resetWells();
   gameActive = true;
   createGrid(); // Set up the game grid
@@ -94,7 +119,7 @@ function startGame() {
 
   gameEndInterval = setInterval(checkTime, 1000); //Checks every second to see if the timer has run out
   //Ends game if so
-  spawnInterval = setInterval(spawnWaterCan, 1000); // Spawn water cans every second
+  spawnInterval = setInterval(spawnWell, 1000); // Spawn well every second
   secondInterval = setInterval(updateTimer, 1000); //Updates timer every second
   
 
@@ -108,20 +133,23 @@ function updateTimer(){
   gameTimer.textContent = time;
 }
 
-//Function used to end the game whentime runs out
+//Function used to end the game when time runs out
 function checkTime(){
   if (time <= 0) endGame();
 }
+
 //Function that will pause the timer and prevent any more interaction until unpaused
 function pauseGame(){
   console.log("TODO: pauseGame()")
 }
 
+//Function that ends the game, stopping all intervals.
 function endGame() {
   gameActive = false; // Mark the game as inactive
   clearInterval(gameEndInterval);// Stops checking if the game has ended (it has.)
   clearInterval(spawnInterval); // Stop spawning water cans
   clearInterval(secondInterval); // Stops decrementing time
+  alert("Game ended!");
 }
 
 // Set up click handler for the start button
