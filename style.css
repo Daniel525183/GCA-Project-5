@@ -106,6 +106,19 @@ h1 img {
   /* Ensure the wrapper is properly centered */
 }
 
+.blocked-well .well-can {
+  filter: grayscale(1) brightness(0.45);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.free-well .well-can {
+  filter: none;
+  opacity: 1;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(46, 157, 247, 0.35);
+}
+
 .well-can {
   width: 100%;
   height: 100%;
@@ -113,11 +126,11 @@ h1 img {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  cursor: pointer;
   border-radius: 50%;
   animation: popUp 0.5s cubic-bezier(0.17, 0.67, 0.34, 2);
   transform-origin: center; /* Ensure scaling happens from the center */
 }
+
 
 @keyframes popUp {
   0% {

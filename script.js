@@ -85,26 +85,31 @@ function createGrid() {
 createGrid();
 
 // Spawns a new item in a random grid cell
-function spawnWell() {
+function spawnInitialWells() {
   if (!gameActive) return; // Stop if the game is not active
   const cells = document.querySelectorAll('.grid-cell');
-  
-  // Clear all cells before spawning a new water can
+
+  // Clear all cells before rendering the initial state.
   cells.forEach(cell => (cell.innerHTML = ''));
 
-  // Select a random cell from the grid to place the water can
-  const randomCell = cells[Math.floor(Math.random() * cells.length)];
+  // Fill all cells as blocked wells first.
+  cells.forEach(cell => {
+    cell.innerHTML = `
+      <div class="well-can-wrapper blocked-well">
+        <div class="well-can"></div>
+      </div>
+    `;
+  });
 
-  // Use a template literal to create the wrapper and water-can element
-  randomCell.innerHTML = `
-    <div class="well-can-wrapper" id = "currentWell">
-      <div class="well-can"></div>
-    </div>
-  `;
-
-  //Update the element for the well
-  wellElement = document.getElementById("currentWell");
-  wellElement.addEventListener('click', clickWell);
+  // Then replace the center 2x2 (indices 5, 6, 9, 10) with free wells.
+  const centerIndices = [5, 6, 9, 10];
+  centerIndices.forEach(index => {
+    cells[index].innerHTML = `
+      <div class="well-can-wrapper free-well">
+        <div class="well-can"></div>
+      </div>
+    `;
+  });
 }
 
 // Initializes and starts a new game
@@ -116,10 +121,11 @@ function startGame() {
   gameActive = true;
   createGrid(); // Set up the game grid
   
+  spawnInitialWells();
 
   gameEndInterval = setInterval(checkTime, 1000); //Checks every second to see if the timer has run out
   //Ends game if so
-  spawnInterval = setInterval(spawnWell, 1000); // Spawn well every second
+  //spawnInterval = setInterval(spawnWell, 1000); // Spawn well every second
   secondInterval = setInterval(updateTimer, 1000); //Updates timer every second
   
 
@@ -147,7 +153,7 @@ function pauseGame(){
 function endGame() {
   gameActive = false; // Mark the game as inactive
   clearInterval(gameEndInterval);// Stops checking if the game has ended (it has.)
-  clearInterval(spawnInterval); // Stop spawning water cans
+  //clearInterval(spawnInterval); // Stop spawning water cans
   clearInterval(secondInterval); // Stops decrementing time
   alert("Game ended!");
 }
