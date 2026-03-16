@@ -1,25 +1,25 @@
 // Game configuration and state variables
-//const GOAL_CANS = 25;        // Total items needed to collect
 let score = 0;            // Current score
 let gameActive = false;      // Tracks if game is currently running
-let spawnInterval;          // Holds the interval for spawning items
 const maxTime = 10;         // Holds the time limit
 let time;                   // Holds the current amount of time
 let secondInterval;          // Holds interval between seconds
 let gameEndInterval;        // Holds the interval for ending game (time == 0)
 
+
 const wellCost = 5;         // The score cost to free a well
 const waterVal = 5;         // The score gained from collecting water
 let wellTracker = Array.from({ length: 4 }, () => new Array(4).fill(false));
-//Will tracks which wells are free/dug
-//False == blocked well
-//True == free well
+
 resetWells();
 console.log(wellTracker);
 
 let gameTimer = document.getElementById("timer");
 let scoreCard = document.getElementById("score-card");
 let wellElement;
+
+let emptyWellElements;
+let freeWellElements;
 
 
 //Function that resets wells to starting configuration
@@ -44,20 +44,42 @@ function resetWells(){
 }
 
 //Function that determines what happens when a well is clicked.
-function clickWell(){
+function clickWell(event){
   //Check what type of well it is
-  //If its unblocked, then run collectWater()
-  //Otherwise, run digWell()
-  collectWater();
+  const clickedWell = event.currentTarget;
+  //If it's blocked, then run digWell()
+  //Otherwise, it is a free well, thus run collectWater().
+  if (clickedWell.classList.contains('blocked-well')){
+    console.log("blocked well");
+  } else if (clickedWell.classList.contains('free-well-empty')){
+    collectWater("free well");
+  }
 }
 
 //Function that collects water from unblocked water. Has a check is see if that well has water
-function collectWater(){
+function collectWater(event){
   console.log("TODO: collectWater()")
   if (!gameActive) return;
+
+  const clickedWell = event.currentTarget;
   
   score += waterVal;
   scoreCard.textContent = score;
+
+  // After collecting, the well becomes empty and starts refilling again.
+  clickedWell.classList.remove('free-well-full');
+  clickedWell.classList.add('free-well-empty');
+  scheduleWellRefill(clickedWell);
+}
+
+function scheduleWellRefill(wellElement) {
+  const randomTime = Math.random() * 8000 + 1000;
+
+  setTimeout(() => {
+    if (!gameActive) return;
+    wellElement.classList.remove('free-well-empty');
+    wellElement.classList.add('free-well-full');
+  }, randomTime);
 }
 
 //Function that frees a well if the player has enough score
@@ -105,10 +127,14 @@ function spawnInitialWells() {
   const centerIndices = [5, 6, 9, 10];
   centerIndices.forEach(index => {
     cells[index].innerHTML = `
-      <div class="well-can-wrapper free-well">
+      <div class="well-can-wrapper free-well-empty">
         <div class="well-can"></div>
       </div>
     `;
+    // Get each center well, add one click handler, then schedule randomized refill.
+    const emptyWellElement = cells[index].querySelector('.free-well-empty');
+    emptyWellElement.addEventListener('click', clickWell);
+    scheduleWellRefill(emptyWellElement);
   });
 }
 
@@ -124,8 +150,6 @@ function startGame() {
   spawnInitialWells();
 
   gameEndInterval = setInterval(checkTime, 1000); //Checks every second to see if the timer has run out
-  //Ends game if so
-  //spawnInterval = setInterval(spawnWell, 1000); // Spawn well every second
   secondInterval = setInterval(updateTimer, 1000); //Updates timer every second
   
 
@@ -153,7 +177,6 @@ function pauseGame(){
 function endGame() {
   gameActive = false; // Mark the game as inactive
   clearInterval(gameEndInterval);// Stops checking if the game has ended (it has.)
-  //clearInterval(spawnInterval); // Stop spawning water cans
   clearInterval(secondInterval); // Stops decrementing time
   alert("Game ended!");
 }

@@ -112,7 +112,13 @@ h1 img {
   cursor: not-allowed;
 }
 
-.free-well .well-can {
+.free-well-empty .well-can {
+  filter: brightness(0.45);
+  opacity: 1;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(46, 157, 247, 0.35);
+}
+.free-well-full .well-can {
   filter: none;
   opacity: 1;
   cursor: pointer;
