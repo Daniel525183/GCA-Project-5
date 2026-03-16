@@ -1,13 +1,13 @@
 // Game configuration and state variables
 let score = 0;            // Current score
 let gameActive = false;      // Tracks if game is currently running
-const maxTime = 10;         // Holds the time limit
+const maxTime = 90;         // Holds the time limit
 let time;                   // Holds the current amount of time
 let secondInterval;          // Holds interval between seconds
 let gameEndInterval;        // Holds the interval for ending game (time == 0)
 
 
-const wellCost = 5;         // The score cost to free a well
+const wellCost = 20;         // The score cost to free a well
 const waterVal = 5;         // The score gained from collecting water
 
 let gameTimer = document.getElementById("timer");
@@ -47,7 +47,7 @@ function collectWater(event){
 }
 
 function scheduleWellRefill(wellElement) {
-  const randomTime = Math.random() * 8000 + 1000;
+  const randomTime = Math.random() * 7000 + 3000;
 
   setTimeout(() => {
     if (!gameActive) return;
@@ -69,13 +69,25 @@ function digWell(event){
     clickedWell.classList.add('free-well-empty');
     scheduleWellRefill(clickedWell);
   } else {
-    digWellFailed();
+    digWellFailed(clickedWell);
   }
 }
 
 //Function that makes it clear that the player did not have enough points to dig a well
-function digWellFailed(){
-  console.log("TODO: digWellFailed")
+function digWellFailed(clickedWell){
+  flashRed(clickedWell, 'flash-red');
+  flashRed(scoreCard, 'flash-red-score');
+}
+
+function flashRed(element, className) {
+  element.classList.remove(className);
+  // Force reflow so repeated failed clicks retrigger the animation.
+  void element.offsetWidth;
+  element.classList.add(className);
+
+  setTimeout(() => {
+    element.classList.remove(className);
+  }, 1000);
 }
 
 // Creates the 4x4 game grid where items will appear

@@ -137,6 +137,14 @@ h1 img {
   transform-origin: center; /* Ensure scaling happens from the center */
 }
 
+.flash-red .well-can {
+  animation: flashRedWell 1s ease;
+}
+
+#score-card.flash-red-score {
+  animation: flashRedScore 1s ease;
+}
+
 
 @keyframes popUp {
   0% {
@@ -144,6 +152,28 @@ h1 img {
   }
   100% {
     transform: scale(1); /* End scaling at full size */
+  }
+}
+
+@keyframes flashRedWell {
+  0%,
+  100% {
+    filter: grayscale(1) brightness(0.45);
+    opacity: 0.7;
+  }
+  50% {
+    filter: sepia(1) saturate(6) hue-rotate(-20deg) brightness(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes flashRedScore {
+  0%,
+  100% {
+    color: inherit;
+  }
+  50% {
+    color: #f5402c;
   }
 }
 
