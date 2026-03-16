@@ -9,10 +9,6 @@ let gameEndInterval;        // Holds the interval for ending game (time == 0)
 
 const wellCost = 5;         // The score cost to free a well
 const waterVal = 5;         // The score gained from collecting water
-let wellTracker = Array.from({ length: 4 }, () => new Array(4).fill(false));
-
-resetWells();
-console.log(wellTracker);
 
 let gameTimer = document.getElementById("timer");
 let scoreCard = document.getElementById("score-card");
@@ -22,27 +18,6 @@ let emptyWellElements;
 let freeWellElements;
 
 
-//Function that resets wells to starting configuration
-function resetWells(){
-  console.log("TODO : resetWells")
-  if (gameActive) return;     //No resetting wells until a game isn't active.
-
-
-  //First set all wells to blocked.
-  for (let row = 0; row < 4; row++){
-    for(let col = 0; col < 4; col ++){
-      wellTracker[row][col] = false; 
-    }
-  }
-
-  //Afterwards, set the four internal wells to be free
-  for (let row = 1; row < 3; row++){
-    for(let col = 1; col < 3; col ++){
-      wellTracker[row][col] = true; 
-    }
-  }
-}
-
 //Function that determines what happens when a well is clicked.
 function clickWell(event){
   //Check what type of well it is
@@ -50,7 +25,7 @@ function clickWell(event){
   //If it's blocked, then run digWell()
   //Otherwise, it is a free well, thus run collectWater().
   if (clickedWell.classList.contains('blocked-well')){
-    console.log("blocked well");
+    digWell(event);
   } else if (clickedWell.classList.contains('free-well-full')){
     collectWater(event);
   }
@@ -58,7 +33,6 @@ function clickWell(event){
 
 //Function that collects water from unblocked water. Has a check is see if that well has water
 function collectWater(event){
-  console.log("TODO: collectWater()")
   if (!gameActive) return;
 
   const clickedWell = event.currentTarget;
@@ -83,8 +57,20 @@ function scheduleWellRefill(wellElement) {
 }
 
 //Function that frees a well if the player has enough score
-function digWell(){
-  console.log("TODO: digWell")
+function digWell(event){
+  if (!gameActive) return;
+
+  const clickedWell = event.currentTarget;
+  if (score >= wellCost){
+    score -= wellCost;
+    scoreCard.textContent = score;
+
+    clickedWell.classList.remove('blocked-well');
+    clickedWell.classList.add('free-well-empty');
+    scheduleWellRefill(clickedWell);
+  } else {
+    digWellFailed();
+  }
 }
 
 //Function that makes it clear that the player did not have enough points to dig a well
@@ -136,6 +122,11 @@ function spawnInitialWells() {
     emptyWellElement.addEventListener('click', clickWell);
     scheduleWellRefill(emptyWellElement);
   });
+
+  const blockedWellElements = document.querySelectorAll('.blocked-well');
+  blockedWellElements.forEach(blockedWellElement => {
+    blockedWellElement.addEventListener('click', clickWell);
+  });
 }
 
 // Initializes and starts a new game
@@ -143,7 +134,6 @@ function startGame() {
   if (gameActive) return; // Prevent starting a new game if one is already active
   time = maxTime;
   score = 0;
-  resetWells();
   gameActive = true;
   createGrid(); // Set up the game grid
   
