@@ -9,13 +9,32 @@ let gameEndInterval;        // Holds the interval for ending game (time == 0)
 
 const wellCost = 20;         // The score cost to free a well
 const waterVal = 5;         // The score gained from collecting water
+const milestoneMax = 300;    // Highest milestone for progress bar scaling
 
 let gameTimer = document.getElementById("timer");
 let scoreCard = document.getElementById("score-card");
+let milestoneProgress = document.getElementById("milestone-progress");
+let milestoneLabels = document.querySelectorAll('.milestone-label');
 let wellElement;
 
 let emptyWellElements;
 let freeWellElements;
+
+function updateScoreUI() {
+  scoreCard.textContent = score;
+
+  if (!milestoneProgress) return;
+
+  const progressPercent = Math.min((score / milestoneMax) * 100, 100);
+  milestoneProgress.style.width = `${progressPercent}%`;
+  milestoneProgress.textContent = `${score} pts`;
+  milestoneProgress.parentElement.setAttribute('aria-valuenow', String(Math.min(score, milestoneMax)));
+
+  milestoneLabels.forEach(label => {
+    const milestoneValue = Number(label.dataset.milestone);
+    label.classList.toggle('milestone-hit', score >= milestoneValue);
+  });
+}
 
 
 //Function that determines what happens when a well is clicked.
@@ -38,7 +57,7 @@ function collectWater(event){
   const clickedWell = event.currentTarget;
   
   score += waterVal;
-  scoreCard.textContent = score;
+  updateScoreUI();
 
   // After collecting, the well becomes empty and starts refilling again.
   clickedWell.classList.remove('free-well-full');
@@ -63,7 +82,7 @@ function digWell(event){
   const clickedWell = event.currentTarget;
   if (score >= wellCost){
     score -= wellCost;
-    scoreCard.textContent = score;
+    updateScoreUI();
 
     clickedWell.classList.remove('blocked-well');
     clickedWell.classList.add('free-well-empty');
@@ -146,6 +165,7 @@ function startGame() {
   if (gameActive) return; // Prevent starting a new game if one is already active
   time = maxTime;
   score = 0;
+  updateScoreUI();
   gameActive = true;
   createGrid(); // Set up the game grid
   

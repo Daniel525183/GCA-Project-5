@@ -59,6 +59,33 @@ h1 img {
   text-align: center;
 }
 
+.milestone-bar {
+  margin-bottom: 20px;
+}
+
+.milestone-header {
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.milestone-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.milestone-label {
+  color: #777;
+  font-weight: bold;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.milestone-label.milestone-hit {
+  color: #159A48;
+  transform: scale(1.08);
+}
+
 .stats {
   display: flex;
   justify-content: space-around;
