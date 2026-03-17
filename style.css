@@ -11,30 +11,50 @@ Secondary Colors:
 - Red:        #F5402C
 - Dark Green: #159A48
 - Pink:       #F16061
-
-Fonts:
-- Proxima Nova
-- Avenir
-
 */
 
 * {
   box-sizing: border-box;
+  font-family: 'Montserrat', Avenir, Arial, sans-serif;
+}
+
+header{
+  background-color: #fff;
+  padding: 20px;
+  border-bottom: 2px solid black;
+}
+
+header img{
+  max-width: 300px;
+  
+  max-height: auto;
+  display: block;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+
+header h1{
+  margin-top: 20px;
+  margin-bottom: 0;
+  font-size: 40px;
+}
+
+header h2{
+  margin-top: 10px;
+  text-align: center;
 }
 
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 10px;
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: antiquewhite;
 }
 
 .container {
   max-width: 750px;
   margin: 20px auto;
-  background-color: #fff;
+  background-color: #FFF7E1;
   padding: 20px;
+  border: solid 4px #2E9DF7;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -53,8 +73,8 @@ h1 img {
   display: block;
 }
 
-.game-instructions {
-  font-size: 18px;
+.game-instructions{
+  font-size: 25px;
   margin-bottom: 30px;
   text-align: center;
 }
@@ -76,13 +96,13 @@ h1 img {
 }
 
 .milestone-label {
-  color: #777;
+  color: #FFC907;
   font-weight: bold;
   transition: color 0.2s, transform 0.2s;
 }
 
 .milestone-label.milestone-hit {
-  color: #159A48;
+  color: #2E9DF7;
   transform: scale(1.08);
 }
 
@@ -90,9 +110,10 @@ h1 img {
   display: flex;
   justify-content: space-around;
   margin-bottom: 30px;
-  background-color: #f5f5f5;
+  background-color: #FFC907;
   padding: 15px 0;
   border-radius: 8px;
+  border: 5px solid #2E9DF7;
 }
 
 .stats p {
@@ -111,7 +132,7 @@ h1 img {
 }
 
 .grid-cell {
-  background-color: #e8e8e8;
+  background-color: #FED8C1;
   border-radius: 8px;
   aspect-ratio: 1.1;
   display: flex;
@@ -206,7 +227,7 @@ h1 img {
 
 
 button {
-  background-color: #4CAF50;
+  background-color: #77A8BB;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -216,4 +237,40 @@ button {
   display: block;
   margin: 30px auto 0;
   transition: background-color 0.2s;
+}
+
+footer{
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+footer h3{
+  font-size: 25px;
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
+  header h1 {
+    font-size: 30px;
+  }
+
+  header h2 {
+    font-size: 20px;
+  }
+
+  .game-instructions,
+  .stats p,
+  .milestone-header,
+  .milestone-label,
+  button,
+  footer {
+    font-size: 16px;
+  }
+
+  footer h3 {
+    font-size: 18px;
+  }
 }

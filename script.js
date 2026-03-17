@@ -27,7 +27,6 @@ function updateScoreUI() {
 
   const progressPercent = Math.min((score / milestoneMax) * 100, 100);
   milestoneProgress.style.width = `${progressPercent}%`;
-  milestoneProgress.textContent = `${score} pts`;
   milestoneProgress.parentElement.setAttribute('aria-valuenow', String(Math.min(score, milestoneMax)));
 
   milestoneLabels.forEach(label => {

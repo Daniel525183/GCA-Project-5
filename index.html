@@ -4,19 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>Well Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <header>
+  
   <h1>Well Quest</h1>
+  <h2>Associated with</h2>
+  <img src = "img/charity-water-logo.png">
 </header>
 <body>
   <div class="container">
-    <p class="game-instructions">Get as many points you can before the time runs out</p>
+    <p class="game-instructions">Get as many points you can before the time runs out!</p>
     <div class="milestone-bar">
       <div class="milestone-header">Milestone Progress</div>
       <div class="progress" role="progressbar" aria-label="Score milestone progress" aria-valuemin="0" aria-valuemax="300" aria-valuenow="0">
-        <div id="milestone-progress" class="progress-bar bg-info progress-bar-striped progress-bar-animated" style="width: 0%">0 pts</div>
+        <div id="milestone-progress" class="progress-bar bg-info"></div>
       </div>
       <div class="milestone-labels">
         <span class="milestone-label" data-milestone="0">0</span>
@@ -33,6 +39,21 @@
     <div class="game-grid"></div>
     <button id="start-game">Start Game</button>
   </div>
+
+  <footer>
+    <h1> Welcome to Well Quest! <h1> 
+    <h3> The goal of this game is to collect as much water from the wells as possible.<br>
+      Above, you can see a 4 by 4 grid of wells, represented by charity: water's signature jerry can. <br>
+      The central four wells are free at the beginning of the game.<br>
+      They will fill up with water over time, and when they are full, you can click on them to collect water and score points.<br>
+      The rest of the wells are blocked. You can restore to their former glory by clicking on them with enough points. <br>
+      It costs 20 points to free a well. <br>
+      What will you do? <br>
+      Spend points on many wells to get a higher rate of water collection, or save up points before the time runs out?<br>
+      It is up to you!
+      
+    </h3>
+  </footer>
   <script src="script.js"></script>
 </body>
 </html>
